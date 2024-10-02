@@ -11,7 +11,7 @@
             return;
         }
         board[xCoord][yCoord] = playerSymbol;
-        console.log(board);
+        
     };
 
     // Functions are only accessible once Gameboard() is assigned to a variable
@@ -19,10 +19,39 @@
 }
 
 
+function GameController(
+    playerOneName = "Player One",
+    playerTwoName = "Player Two"
+) {
+    const gameboard = Gameboard();
+    const players = [
+        {name: playerOneName, symbol: "X"}, 
+        {name: playerTwoName, symbol: "O"}
+    ];
 
+    let activePlayer = players[0]
+    const switchPlayer = () => {
+        if (activePlayer === players[0]) {
+            activePlayer = players[1];
+        } else {
+            activePlayer = players[0];
+        };
+    }
+    const getActivePlayer = () => activePlayer;
 
+    const printNewRound = () => {
+        console.log(gameboard.getBoard());
+        console.log(`${getActivePlayer().name}'s turn`)
+    };
 
-function addSymbol(player) {
-   const symbol = player
-   return symbol;
+    const playRound = (chooseX, chooseY) => {
+        gameboard.addPlayerChoice(chooseX, chooseY, activePlayer.symbol);
+        switchPlayer();
+        printNewRound();
+    }
+
+    printNewRound();
+    return { playRound, getActivePlayer }
 }
+
+const game = GameController();
