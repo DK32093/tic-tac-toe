@@ -5,13 +5,15 @@
     const getBoard = () => board;
 
     const addPlayerChoice = (xCoord, yCoord, playerSymbol) => {
+        let choice = "valid"
         // check that cell is available
         if (board[xCoord][yCoord] !== "E") {
             console.log("That spot is taken!");
-            return;
-        }
+            choice = "invalid";
+        } else {
         board[xCoord][yCoord] = playerSymbol;
-        
+        };
+        return choice;
     };
 
     // Functions are only accessible once Gameboard() is assigned to a variable
@@ -41,13 +43,18 @@ function GameController(
 
     const printNewRound = () => {
         console.log(gameboard.getBoard());
-        console.log(`${getActivePlayer().name}'s turn`)
+        console.log(`${activePlayer.name}'s turn`)
     };
 
     const playRound = (chooseX, chooseY) => {
-        gameboard.addPlayerChoice(chooseX, chooseY, activePlayer.symbol);
+        let choice = gameboard.addPlayerChoice(chooseX, chooseY, activePlayer.symbol);
+        if (choice === "invalid") {
+            console.log(`${activePlayer.name}'s turn`)
+            return;
+        } else {
         switchPlayer();
         printNewRound();
+        };
     }
 
     printNewRound();
