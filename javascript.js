@@ -112,18 +112,32 @@ function GameController(
 
 function ScreenController() {
     const game = GameController();
-    const screenBoard = game.getBoard();
     
     const boardDisplay = document.querySelector(".board")
     const renderBoard = () => {
-        screenBoard.forEach(row => row.forEach(cell => {
+        boardDisplay.textContent = "";
+        const screenBoard = game.getBoard();
+        screenBoard.forEach((row, x) => row.forEach((cell, y) => {
             const boardCell = document.createElement("button");
             boardCell.setAttribute("class", "cell");
+            boardCell.x = x;
+            boardCell.y = y;
+            boardCell.textContent = cell;
             boardDisplay.appendChild(boardCell);
         }));
     };
 
+function handleBoardClick(e) {
+    const chosenX = e.target.x
+    const chosenY = e.target.y
+    game.playRound(chosenX, chosenY);
     renderBoard();
+}
+
+boardDisplay.addEventListener("click", handleBoardClick);
+
+renderBoard();
+
 }
 
 ScreenController();
