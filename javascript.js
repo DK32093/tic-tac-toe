@@ -1,4 +1,4 @@
- function Gameboard(){
+ function Gameboard() {
     let board = Array.from(Array(3), () => Array(3).fill("E"));
     // console.log("Gameboard Board")
     // console.log(board)
@@ -9,6 +9,7 @@
         let choice = "valid"
         // console.log("choice board")
         let boardCheck = checkForWin();
+        // reset board on win or tie
         if (boardCheck === "true" || boardCheck === "tie") {
             board = Array.from(Array(3), () => Array(3).fill("E"));
         };
@@ -47,8 +48,10 @@
         ) {
             win = "true"
         };
-        // check for tie
-        if (board.every(row => row.every(cell => cell !== "E"))) {win = "tie"};
+        // check for tie after checking for win
+        if (win === "false") {
+            if (board.every(row => row.every(cell => cell !== "E"))) {win = "tie"};
+        };
         console.log(win + " win");
         return win;
     }
@@ -99,12 +102,28 @@ function GameController(
             } else {
                 switchPlayer();
                 printNewRound();
-            }
+            } 
         };
     }
 
     printNewRound();
-    return { playRound, getActivePlayer }
+    return { playRound, getActivePlayer, getBoard: gameboard.getBoard }
 }
 
-const game = GameController();
+function ScreenController() {
+    const game = GameController();
+    const screenBoard = game.getBoard();
+    
+    const boardDisplay = document.querySelector(".board")
+    const renderBoard = () => {
+        screenBoard.forEach(row => row.forEach(cell => {
+            const boardCell = document.createElement("button");
+            boardCell.setAttribute("class", "cell");
+            boardDisplay.appendChild(boardCell);
+        }));
+    };
+
+    renderBoard();
+}
+
+ScreenController();
