@@ -1,6 +1,11 @@
+.board-container {
+    height: 30rem;
+    width: 30rem;
+}
+
 .board {
     display: grid;
-    grid-template: repeat(3, 1fr) / repeat(3, 1fr)
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
 }
 
 .cell {

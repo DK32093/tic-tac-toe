@@ -10,12 +10,13 @@
         // console.log("choice board")
         let boardCheck = checkForWin();
         // reset board on win or tie
-        if (boardCheck === "true" || boardCheck === "tie") {
-            board = Array.from(Array(3), () => Array(3).fill("E"));
-        };
+        //if (boardCheck === "true" || boardCheck === "tie") {
+            //return;
+            //board = Array.from(Array(3), () => Array(3).fill("E"));
+        //};
         // console.log(board) 
         // check that cell is available
-        if (board[xCoord][yCoord] !== "E") {
+        if (board[xCoord][yCoord] !== "E" || boardCheck === "true" || boardCheck === "tie") {
             console.log("That spot is taken!");
             choice = "invalid";
         } else {
@@ -112,8 +113,9 @@ function GameController(
 
 function ScreenController() {
     const game = GameController();
-    
-    const boardDisplay = document.querySelector(".board")
+    const resetButton = document.querySelector(".reset");
+    const boardDisplay = document.querySelector(".board");
+
     const renderBoard = () => {
         boardDisplay.textContent = "";
         const screenBoard = game.getBoard();
@@ -127,16 +129,18 @@ function ScreenController() {
         }));
     };
 
-function handleBoardClick(e) {
-    const chosenX = e.target.x
-    const chosenY = e.target.y
-    game.playRound(chosenX, chosenY);
+    function handleBoardClick(e) {
+        const chosenX = e.target.x
+        const chosenY = e.target.y
+        game.playRound(chosenX, chosenY);
+        renderBoard();
+    }
+
+    boardDisplay.addEventListener("click", handleBoardClick);
+    resetButton.addEventListener("click", ScreenController)
+
+
     renderBoard();
-}
-
-boardDisplay.addEventListener("click", handleBoardClick);
-
-renderBoard();
 
 }
 
