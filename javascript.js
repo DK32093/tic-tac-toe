@@ -104,7 +104,7 @@ function GameController() {
 
     renderBoard();
     textDiv.textContent = (`${activePlayer.name}'s turn`);
-    return { playRound, getBoard: gameboard.getBoard, boardDisplay, renderBoard }
+    return { playRound, boardDisplay, renderBoard }
 }
 
 const ScreenController = () => {
