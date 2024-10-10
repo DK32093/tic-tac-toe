@@ -1,12 +1,12 @@
 function Gameboard() {
-    let board = Array.from(Array(3), () => Array(3).fill("E"));
+    let board = Array.from(Array(3), () => Array(3).fill(""));
 
     const getBoard = () => board;
 
     const addPlayerChoice = (xCoord, yCoord, playerSymbol) => {
         let choice = "valid"
         let boardCheck = checkForWin();
-        if (board[xCoord][yCoord] !== "E" || 
+        if (board[xCoord][yCoord] !== "" || 
             boardCheck === "true" || boardCheck === "tie") {
             choice = "invalid";
         } else {
@@ -18,13 +18,12 @@ function Gameboard() {
     const checkForWin = () => {
         let win = "false"
         // check rows and columns
-        let board = getBoard()
         for (let i = 0; i < 3; i++) {
             const rowSymbols = board[i].filter((value, index, arr) => arr.indexOf(value) === index);
             const colSymbols = board.map(x => x[i]).filter((value, index, arr) => arr.indexOf(value) === index);
             if (
-                (rowSymbols.length === 1 && !(rowSymbols.includes("E"))) ||
-                (colSymbols.length === 1 && !(colSymbols.includes("E")))
+                (rowSymbols.length === 1 && !(rowSymbols.includes(""))) ||
+                (colSymbols.length === 1 && !(colSymbols.includes("")))
             ) {
                 win = "true";
             };
@@ -35,16 +34,15 @@ function Gameboard() {
         const diagonal1 = diagonals[0].filter((value, index, arr) => arr.indexOf(value) === index);
         const diagonal2 = diagonals[1].filter((value, index, arr) => arr.indexOf(value) === index);
         if (
-            (diagonal1.length === 1 && !(diagonal1.includes("E"))) ||
-            (diagonal2.length === 1 && !(diagonal2.includes("E")))
+            (diagonal1.length === 1 && !(diagonal1.includes(""))) ||
+            (diagonal2.length === 1 && !(diagonal2.includes("")))
         ) {
             win = "true"
         };
         // check for tie after checking for win
         if (win === "false") {
-            if (board.every(row => row.every(cell => cell !== "E"))) {win = "tie"};
+            if (board.every(row => row.every(cell => cell !== ""))) {win = "tie"};
         };
-        console.log(win + " win");
         return win;
     }
 
@@ -71,13 +69,11 @@ function GameController() {
             activePlayer = players[0];
         };
     }
-    const getActivePlayer = () => activePlayer;
 
     const textDiv = document.querySelector(".text-display");
     const playRound = (chooseX, chooseY) => {
         let choice = gameboard.addPlayerChoice(chooseX, chooseY, activePlayer.symbol);
         if (choice === "invalid") {
-            console.log(`${activePlayer.name}'s turn`)
             return;
         } else {
             let winCheck = gameboard.checkForWin();
@@ -108,7 +104,7 @@ function GameController() {
 
     renderBoard();
     textDiv.textContent = (`${activePlayer.name}'s turn`);
-    return { playRound, getActivePlayer, getBoard: gameboard.getBoard, boardDisplay, renderBoard }
+    return { playRound, getBoard: gameboard.getBoard, boardDisplay, renderBoard }
 }
 
 const ScreenController = () => {
