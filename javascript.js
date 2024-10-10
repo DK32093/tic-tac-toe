@@ -1,23 +1,17 @@
- function Gameboard() {
+function Gameboard() {
     let board = Array.from(Array(3), () => Array(3).fill("E"));
     // console.log("Gameboard Board")
     // console.log(board)
 
     const getBoard = () => board;
+    console.log("Board")
+    console.log(board)
 
     const addPlayerChoice = (xCoord, yCoord, playerSymbol) => {
         let choice = "valid"
-        // console.log("choice board")
         let boardCheck = checkForWin();
-        // reset board on win or tie
-        //if (boardCheck === "true" || boardCheck === "tie") {
-            //return;
-            //board = Array.from(Array(3), () => Array(3).fill("E"));
-        //};
-        // console.log(board) 
-        // check that cell is available
-        if (board[xCoord][yCoord] !== "E" || boardCheck === "true" || boardCheck === "tie") {
-            console.log("That spot is taken!");
+        if (board[xCoord][yCoord] !== "E" || 
+            boardCheck === "true" || boardCheck === "tie") {
             choice = "invalid";
         } else {
             board[xCoord][yCoord] = playerSymbol;
@@ -28,6 +22,7 @@
     const checkForWin = () => {
         let win = "false"
         // check rows and columns
+        let board = getBoard()
         for (let i = 0; i < 3; i++) {
             const rowSymbols = board[i].filter((value, index, arr) => arr.indexOf(value) === index);
             const colSymbols = board.map(x => x[i]).filter((value, index, arr) => arr.indexOf(value) === index);
@@ -61,10 +56,11 @@
 }
 
 
-function GameController(
-    playerOneName = "Player One",
-    playerTwoName = "Player Two"
-) {
+function GameController() { // doubling game instance when reset button is pushed
+    playerOneName = document.querySelector("#player-one").value;
+    playerTwoName = document.querySelector("#player-two").value;
+    if (playerOneName === "") playerOneName = "Player One";
+    if (playerTwoName === "") playerTwoName = "Player Two";
     const gameboard = Gameboard();
     const players = [
         {name: playerOneName, symbol: "X"}, 
@@ -82,7 +78,7 @@ function GameController(
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
-        // console.log("print round Board")
+        console.log("print round Board");
         console.log(gameboard.getBoard());
         console.log(`${activePlayer.name}'s turn`)
     };
@@ -107,18 +103,12 @@ function GameController(
         };
     }
 
-    printNewRound();
-    return { playRound, getActivePlayer, getBoard: gameboard.getBoard }
-}
-
-function ScreenController() {
-    const game = GameController();
-    const resetButton = document.querySelector(".reset");
     const boardDisplay = document.querySelector(".board");
-
     const renderBoard = () => {
+        //const boardDisplay = document.querySelector(".board");
         boardDisplay.textContent = "";
-        const screenBoard = game.getBoard();
+        const screenBoard = gameboard.getBoard();
+        console.log("screenBoard " + screenBoard);
         screenBoard.forEach((row, x) => row.forEach((cell, y) => {
             const boardCell = document.createElement("button");
             boardCell.setAttribute("class", "cell");
@@ -129,19 +119,62 @@ function ScreenController() {
         }));
     };
 
-    function handleBoardClick(e) {
-        const chosenX = e.target.x
-        const chosenY = e.target.y
-        game.playRound(chosenX, chosenY);
-        renderBoard();
+    renderBoard();
+    printNewRound();
+    return { playRound, getActivePlayer, getBoard: gameboard.getBoard, boardDisplay, renderBoard }
+}
+
+const ScreenController = () => {
+    let game = GameController();
+    const resetButton = document.querySelector(".reset");
+    //const boardDisplay = document.querySelector(".board");
+
+    const getGame = () => game;
+
+    // const renderBoard = () => {
+    //     boardDisplay.textContent = "";
+    //     const screenBoard = game.getBoard();
+    //     console.log("screenBoard " + screenBoard);
+    //     screenBoard.forEach((row, x) => row.forEach((cell, y) => {
+    //         const boardCell = document.createElement("button");
+    //         boardCell.setAttribute("class", "cell");
+    //         boardCell.x = x;
+    //         boardCell.y = y;
+    //         boardCell.textContent = cell;
+    //         boardDisplay.appendChild(boardCell);
+    //     }));
+    // };
+
+    function handleResetClick() {
+        return game = GameController();
+        //getGame();
+        //console.log("reset board " + game.getBoard());
+        //return game;
     }
 
-    boardDisplay.addEventListener("click", handleBoardClick);
-    resetButton.addEventListener("click", ScreenController)
+    function handleBoardClick(e) {
+        const targetCell = e.target.closest(".cell");
+        console.log("handle");
+        if (targetCell) {
+            const chosenX = targetCell.x
+            const chosenY = targetCell.y
+            game.playRound(chosenX, chosenY); // calling previous game
+            game.renderBoard();
+        }
+    }
 
 
-    renderBoard();
+    game.boardDisplay.addEventListener("click", handleBoardClick);
+    resetButton.addEventListener("click", handleResetClick)
+
+    //renderBoard();
+
+    //return{ getGame, handleBoardClick }
 
 }
 
+
+
+//let newGame = "false";
 ScreenController();
+//renderBoard();
