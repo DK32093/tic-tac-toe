@@ -1,11 +1,7 @@
 function Gameboard() {
     let board = Array.from(Array(3), () => Array(3).fill("E"));
-    // console.log("Gameboard Board")
-    // console.log(board)
 
     const getBoard = () => board;
-    console.log("Board")
-    console.log(board)
 
     const addPlayerChoice = (xCoord, yCoord, playerSymbol) => {
         let choice = "valid"
@@ -56,7 +52,7 @@ function Gameboard() {
 }
 
 
-function GameController() { // doubling game instance when reset button is pushed
+function GameController() {
     playerOneName = document.querySelector("#player-one").value;
     playerTwoName = document.querySelector("#player-two").value;
     if (playerOneName === "") playerOneName = "Player One";
@@ -78,8 +74,6 @@ function GameController() { // doubling game instance when reset button is pushe
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
-        console.log("print round Board");
-        console.log(gameboard.getBoard());
         console.log(`${activePlayer.name}'s turn`)
     };
 
@@ -105,10 +99,8 @@ function GameController() { // doubling game instance when reset button is pushe
 
     const boardDisplay = document.querySelector(".board");
     const renderBoard = () => {
-        //const boardDisplay = document.querySelector(".board");
         boardDisplay.textContent = "";
         const screenBoard = gameboard.getBoard();
-        console.log("screenBoard " + screenBoard);
         screenBoard.forEach((row, x) => row.forEach((cell, y) => {
             const boardCell = document.createElement("button");
             boardCell.setAttribute("class", "cell");
@@ -127,29 +119,9 @@ function GameController() { // doubling game instance when reset button is pushe
 const ScreenController = () => {
     let game = GameController();
     const resetButton = document.querySelector(".reset");
-    //const boardDisplay = document.querySelector(".board");
-
-    const getGame = () => game;
-
-    // const renderBoard = () => {
-    //     boardDisplay.textContent = "";
-    //     const screenBoard = game.getBoard();
-    //     console.log("screenBoard " + screenBoard);
-    //     screenBoard.forEach((row, x) => row.forEach((cell, y) => {
-    //         const boardCell = document.createElement("button");
-    //         boardCell.setAttribute("class", "cell");
-    //         boardCell.x = x;
-    //         boardCell.y = y;
-    //         boardCell.textContent = cell;
-    //         boardDisplay.appendChild(boardCell);
-    //     }));
-    // };
 
     function handleResetClick() {
         return game = GameController();
-        //getGame();
-        //console.log("reset board " + game.getBoard());
-        //return game;
     }
 
     function handleBoardClick(e) {
@@ -158,23 +130,13 @@ const ScreenController = () => {
         if (targetCell) {
             const chosenX = targetCell.x
             const chosenY = targetCell.y
-            game.playRound(chosenX, chosenY); // calling previous game
+            game.playRound(chosenX, chosenY);
             game.renderBoard();
         }
     }
 
-
     game.boardDisplay.addEventListener("click", handleBoardClick);
     resetButton.addEventListener("click", handleResetClick)
-
-    //renderBoard();
-
-    //return{ getGame, handleBoardClick }
-
 }
 
-
-
-//let newGame = "false";
 ScreenController();
-//renderBoard();
