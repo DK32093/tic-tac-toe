@@ -1,11 +1,41 @@
 #player-one, #player-two {
-    color: rgb(151, 150, 150);
-    font-style: italic;
+    font-style: bold;
+    margin-left: 1rem;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1, h2, input {
+    margin-bottom: 2rem;
+}
+
+.reset {
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    background-color: burlywood;
+}
+
+.board-text-wrapper {
+    display: flex;
+    align-items: center;
 }
 
 .board-container {
     height: 30rem;
     width: 30rem;
+    margin: 2rem;
 }
 
 .board {
@@ -15,4 +45,11 @@
 
 .cell {
     aspect-ratio: 1/1;
+    background-color: burlywood;
+}
+
+.text-display {
+    font-size: 3rem;
+    text-align: center;
+    margin-right: 2rem;
 }

@@ -73,10 +73,7 @@ function GameController() {
     }
     const getActivePlayer = () => activePlayer;
 
-    const printNewRound = () => {
-        console.log(`${activePlayer.name}'s turn`)
-    };
-
+    const textDiv = document.querySelector(".text-display");
     const playRound = (chooseX, chooseY) => {
         let choice = gameboard.addPlayerChoice(chooseX, chooseY, activePlayer.symbol);
         if (choice === "invalid") {
@@ -85,14 +82,12 @@ function GameController() {
         } else {
             let winCheck = gameboard.checkForWin();
             if (winCheck === "true") {
-                console.log(`${activePlayer.name} wins!`)
-                printNewRound();
+                textDiv.textContent = (`${activePlayer.name} wins!`);
             } else if (winCheck === "tie") {
-                console.log(`Game over: it's a tie!`)
-                printNewRound();
+                textDiv.textContent = (`Game over: it's a tie!`);
             } else {
                 switchPlayer();
-                printNewRound();
+                textDiv.textContent = (`${activePlayer.name}'s turn`);
             } 
         };
     }
@@ -112,7 +107,7 @@ function GameController() {
     };
 
     renderBoard();
-    printNewRound();
+    textDiv.textContent = (`${activePlayer.name}'s turn`);
     return { playRound, getActivePlayer, getBoard: gameboard.getBoard, boardDisplay, renderBoard }
 }
 
@@ -126,7 +121,6 @@ const ScreenController = () => {
 
     function handleBoardClick(e) {
         const targetCell = e.target.closest(".cell");
-        console.log("handle");
         if (targetCell) {
             const chosenX = targetCell.x
             const chosenY = targetCell.y
